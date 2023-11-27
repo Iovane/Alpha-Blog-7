@@ -15,6 +15,7 @@
         <li class="nav-item">
           <a class="nav-link" href= <%= about_path %>>About</a>
 </li>
+
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Dropdown
@@ -26,14 +27,36 @@
             <li><a class="dropdown-item" href="#">Something else here</a></li>
           </ul>
 </li>
+
+        <% if logged_in? %>
+          <li class="nav-item">
+            <%= link_to current_user.username, user_path(current_user), class: "nav-link" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to 'Logout', logout_path, class: "nav-link", data:{turbo_method: :delete} %>
+          </li>
+        <% else %>
+          <li class="nav-item">
+            <a class="nav-link" href= <%= login_path %>>Log in</a>
+          </li>
+        <% end %>
+
         <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-</li>
+          <a class="nav-link" href= <%= signup_path %>>Sign up</a>
+        </li>
+
+
+        <%= "Current User ID: #{current_user}" %>  <br>
+        <%= "Logged In: #{logged_in?}" %>
+
+
+
       </ul>
-<form class="d-flex" role="search">
-<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-<button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+        <form class="d-flex" role="search">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+
 </div>
   </div>
 </nav>

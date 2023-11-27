@@ -5,6 +5,7 @@ class ArticlesController < ApplicationController
   end
 
   def index
+    @user = User.last
     @articles = Article.paginate(page: params[:page], per_page: 5)
   end
 
@@ -17,7 +18,7 @@ class ArticlesController < ApplicationController
 
   def create
     @article = Article.new(article_params)
-    @article.user = User.first
+    @article.user = User.find(session[:user_id])
 
     if @article.save
       flash[:notice] = 'Article was created.'
@@ -42,8 +43,8 @@ class ArticlesController < ApplicationController
   def destroy
 
     @article.destroy
-
     redirect_to articles_path
+
   end
 
   private
@@ -53,7 +54,7 @@ class ArticlesController < ApplicationController
   end
 
   def article_params
-    params.require(:article).permit(:title, :description)
+    params.require(:article).permit(:title, :description, :user_id)
   end
 
 end
