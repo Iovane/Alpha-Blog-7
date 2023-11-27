@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update]
+  before_action :require_user, only: [:edit, :update]
+  before_action :require_correct_user, only: [:edit, :update]
   def show
     @articles = @user.articles.paginate(page: params[:page], per_page: 5)
   end
@@ -43,5 +45,12 @@ class UsersController < ApplicationController
 
   def set_user
     @user = User.find(params[:id])
+  end
+
+  def require_correct_user
+    if @user != current_user
+      flash[:alert] = "You dont have permission to edit this users info"
+      redirect_to @user
+    end
   end
 end
