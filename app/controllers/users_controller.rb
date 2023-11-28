@@ -27,7 +27,7 @@ class UsersController < ApplicationController
   
   def destroy
     @user.destroy
-    session[:user_id] = nil
+    session[:user_id] = nil if @user == current_user
     flash[:notice] = "Account and all associated articles successfully deleted"
     redirect_to root_path
   end
@@ -55,8 +55,8 @@ class UsersController < ApplicationController
   end
 
   def require_correct_user
-    if @user != current_user
-      flash[:alert] = "You dont have permission to edit this users info"
+    if @user != current_user && !current_user.admin?
+      flash[:alert] = "You don't have permission to edit or delete this users info"
       redirect_to @user
     end
   end
